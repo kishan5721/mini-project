@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Task & Study Planner | College Mini Project</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-theme="light">
+  <div class="app-container">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+            <path d="M6 12v5c3 3 9 3 12 0v-5" />
+          </svg>
+          <div class="brand-text">
+            <h2>StudyPlan</h2>
+            <span>Student Portal</span>
+          </div>
+        </div>
+        <button class="btn-close-sidebar" id="closeSidebarBtn" aria-label="Close Sidebar">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <ul class="nav-list">
+          <li class="nav-item">
+            <button class="nav-link active" data-section="dashboard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="9"></rect>
+                <rect x="14" y="3" width="7" height="5"></rect>
+                <rect x="14" y="12" width="7" height="9"></rect>
+                <rect x="3" y="16" width="7" height="5"></rect>
+              </svg>
+              <span>Dashboard</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-section="tasks">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M9 11l3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+              <span>My Tasks</span>
+              <span class="badge-count" id="sidebarPendingCount">0</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-section="add-task">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+              </svg>
+              <span>Add New Task</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-section="completed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <span>Completed</span>
+              <span class="badge-count count-success" id="sidebarCompletedCount">0</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-section="about">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <span>About Project</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-card">
+          <div class="user-avatar">
+            <span>AI</span>
+          </div>
+          <div class="user-info">
+            <h4>Study Planner</h4>
+            <p>Adaptive Learning</p>
+          </div>
+        </div>
+        <div class="sidebar-meta">
+          <span>AI-Powered Study Planning Platform</span>
+          <span class="status-indicator"><span class="dot"></span> Online</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Overlay for mobile drawer -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <!-- Top Header Bar -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="btn-toggle-sidebar" id="openSidebarBtn" aria-label="Open Sidebar">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div class="welcome-box">
+            <h1 class="welcome-title" id="greetingText">Welcome Back! 👋</h1>
+            <p class="welcome-date" id="currentDateDisplay">Saturday, November 15, 2026</p>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <!-- Quick Search -->
+          <div class="header-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="globalSearchInput" placeholder="Quick search tasks..." aria-label="Quick search">
+          </div>
+
+          <!-- Quick Add Button -->
+          <button class="btn btn-primary btn-sm quick-add-btn" id="headerQuickAddBtn">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>New Task</span>
+          </button>
+
+          <!-- Theme Toggle -->
+          <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Dark Mode"
+            title="Toggle Dark/Light Mode">
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Container Views -->
+      <main class="content-container">
+
+        <!-- ================= SECTION 1: DASHBOARD ================= -->
+        <section class="page-section active" id="section-dashboard">
+          <!-- Statistics Cards Grid -->
+          <div class="stats-grid">
+            <div class="stat-card total-card">
+              <div class="stat-icon-wrapper blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <div class="stat-content">
+                <span class="stat-label">Total Tasks</span>
+                <h3 class="stat-number" id="dashTotalTasks">0</h3>
+                <span class="stat-subtext">All planned assignments</span>
+              </div>
+            </div>
+
+            <div class="stat-card pending-card">
+              <div class="stat-icon-wrapper amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div class="stat-content">
+                <span class="stat-label">Pending Tasks</span>
+                <h3 class="stat-number" id="dashPendingTasks">0</h3>
+                <span class="stat-subtext">Action required</span>
+              </div>
+            </div>
+
+            <div class="stat-card completed-card">
+              <div class="stat-icon-wrapper emerald">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+              </div>
+              <div class="stat-content">
+                <span class="stat-label">Completed Tasks</span>
+                <h3 class="stat-number" id="dashCompletedTasks">0</h3>
+                <span class="stat-subtext">Successfully finished</span>
+              </div>
+            </div>
+
+            <div class="stat-card rate-card">
+              <div class="stat-icon-wrapper purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+              </div>
+              <div class="stat-content">
+                <span class="stat-label">Completion Rate</span>
+                <h3 class="stat-number" id="dashCompletionRate">0%</h3>
+                <div class="stat-progress-bar-container">
+                  <div class="stat-progress-bar" id="dashProgressBar" style="width: 0%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Visual Progress & Study Insights Banner -->
+          <div class="dashboard-banner">
+            <div class="banner-content">
+              <div class="banner-badge">💡 Daily Study Tip</div>
+              <h3 id="dailyTipText">Use the Pomodoro Technique: 25 minutes of deep focus followed by a 5-minute break.
+              </h3>
+              <p>Organize high-priority subjects first to tackle challenging topics with peak mental energy.</p>
+            </div>
+            <div class="banner-progress-box">
+              <div class="progress-ring-container">
+                <svg class="progress-ring" width="100" height="100">
+                  <circle class="progress-ring-circle-bg" stroke-width="8" fill="transparent" r="42" cx="50" cy="50" />
+                  <circle class="progress-ring-circle" id="progressRingCircle" stroke-width="8" fill="transparent"
+                    r="42" cx="50" cy="50" />
+                </svg>
+                <div class="progress-ring-text">
+                  <span id="progressRingPercent">0%</span>
+                  <small>Done</small>
+                </div>
+              </div>
+              <div class="banner-priority-counts">
+                <span class="pill-badge pill-high"><span class="dot-urgent"></span> <span id="dashHighCount">0</span>
+                  High</span>
+                <span class="pill-badge pill-med"><span class="dot-warning"></span> <span id="dashMedCount">0</span>
+                  Med</span>
+                <span class="pill-badge pill-low"><span class="dot-normal"></span> <span id="dashLowCount">0</span>
+                  Low</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dashboard Grid: Urgent Deadlines & Recent Tasks -->
+          <div class="dashboard-grid">
+            <!-- Urgent / Upcoming Deadlines Radar -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <div class="card-title-group">
+                  <span class="card-icon-tag red">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                      </polygon>
+                    </svg>
+                  </span>
+                  <div>
+                    <h3>Upcoming Deadlines</h3>
+                    <p class="subtitle">Tasks due within 72 hours</p>
+                  </div>
+                </div>
+                <button class="btn btn-text" data-section="tasks">View All &rarr;</button>
+              </div>
+              <div class="dash-card-body" id="urgentTasksList">
+                <!-- Dynamically injected -->
+              </div>
+            </div>
+
+            <!-- Recent Study Tasks -->
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <div class="card-title-group">
+                  <span class="card-icon-tag blue">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="9 11 12 14 22 4"></polyline>
+                      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                  </span>
+                  <div>
+                    <h3>Recent Tasks</h3>
+                    <p class="subtitle">Latest additions to your study plan</p>
+                  </div>
+                </div>
+                <button class="btn btn-outline-primary btn-sm" data-section="add-task">+ Add Task</button>
+              </div>
+              <div class="dash-card-body" id="recentTasksList">
+                <!-- Dynamically injected -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SECTION 2: MY TASKS ================= -->
+        <section class="page-section" id="section-tasks">
+          <div class="section-top-bar">
+            <div>
+              <h2 class="section-title">My Study Tasks</h2>
+              <p class="section-subtitle">Track, filter, edit and complete your academic assignments.</p>
+            </div>
+            <button class="btn btn-primary" data-section="add-task">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Create Task</span>
+            </button>
+          </div>
+
+          <!-- Filter & Control Toolbar -->
+          <div class="filter-toolbar">
+            <div class="filter-group-main">
+              <!-- Search bar -->
+              <div class="input-search-wrapper">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="taskSearchInput" placeholder="Search by task title or keyword...">
+                <button class="clear-search-btn" id="clearSearchBtn" title="Clear search">&times;</button>
+              </div>
+
+              <!-- Filter by Subject -->
+              <div class="select-wrapper">
+                <select id="filterSubject" aria-label="Filter by subject">
+                  <option value="ALL">All Subjects</option>
+                  <option value="Computer Science">Computer Science</option>
+                  <option value="Data Structures & Algorithms">Data Structures & Algorithms</option>
+                  <option value="Mathematics">Mathematics</option>
+                  <option value="Operating Systems">Operating Systems</option>
+                  <option value="Database Systems">Database Systems</option>
+                  <option value="Physics">Physics</option>
+                  <option value="Web Development">Web Development</option>
+                  <option value="English & Soft Skills">English & Soft Skills</option>
+                  <option value="Other">Other Subjects</option>
+                </select>
+              </div>
+
+              <!-- Filter by Priority -->
+              <div class="select-wrapper">
+                <select id="filterPriority" aria-label="Filter by priority">
+                  <option value="ALL">All Priorities</option>
+                  <option value="High">High Priority</option>
+                  <option value="Medium">Medium Priority</option>
+                  <option value="Low">Low Priority</option>
+                </select>
+              </div>
+
+              <!-- Sort By -->
+              <div class="select-wrapper">
+                <select id="sortBy" aria-label="Sort tasks">
+                  <option value="deadline-asc">Deadline (Earliest First)</option>
+                  <option value="deadline-desc">Deadline (Latest First)</option>
+                  <option value="priority-desc">Priority (High to Low)</option>
+                  <option value="created-desc">Date Added (Newest)</option>
+                  <option value="title-asc">Title (A - Z)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Status Tabs -->
+            <div class="status-tab-group">
+              <button class="status-tab active" data-status="ALL">All (<span id="countFilterAll">0</span>)</button>
+              <button class="status-tab" data-status="PENDING">Pending (<span id="countFilterPending">0</span>)</button>
+              <button class="status-tab" data-status="COMPLETED">Completed (<span
+                  id="countFilterCompleted">0</span>)</button>
+            </div>
+          </div>
+
+          <!-- Active Filter Pill indicators (if any active) -->
+          <div class="active-filters-row" id="activeFiltersRow" style="display: none;">
+            <span class="active-filters-label">Active Filters:</span>
+            <div class="active-filters-badges" id="activeFilterTags"></div>
+            <button class="btn-clear-filters" id="resetFiltersBtn">Reset All</button>
+          </div>
+
+          <!-- Tasks List Container -->
+          <div class="tasks-grid" id="allTasksGrid">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state-card" id="emptyStateContainer" style="display: none;">
+            <div class="empty-state-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path>
+                <rect x="9" y="3" width="6" height="4" rx="2"></rect>
+                <path d="M9 14l2 2 4-4"></path>
+              </svg>
+            </div>
+            <h3 id="emptyStateTitle">No Tasks Found</h3>
+            <p id="emptyStateMessage">You haven't scheduled any tasks matching this criteria yet.</p>
+            <button class="btn btn-primary" data-section="add-task">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Add Your First Task</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- ================= SECTION 3: ADD TASK ================= -->
+        <section class="page-section" id="section-add-task">
+          <div class="section-top-bar">
+            <div>
+              <h2 class="section-title">Schedule New Study Task</h2>
+              <p class="section-subtitle">Set goals, deadlines and priorities for your college subjects.</p>
+            </div>
+          </div>
+
+          <div class="form-layout-container">
+            <div class="form-card">
+              <form id="addTaskForm" novalidate>
+                <!-- Task Title -->
+                <div class="form-group">
+                  <label for="taskTitle" class="form-label">
+                    Task Title <span class="required">*</span>
+                  </label>
+                  <div class="input-with-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="4" y1="9" x2="20" y2="9"></line>
+                      <line x1="4" y1="15" x2="20" y2="15"></line>
+                      <line x1="10" y1="3" x2="8" y2="21"></line>
+                      <line x1="16" y1="3" x2="14" y2="21"></line>
+                    </svg>
+                    <input type="text" id="taskTitle" class="form-input"
+                      placeholder="e.g., Complete Operating Systems Page Replacement Lab" required>
+                  </div>
+                  <div class="form-error" id="titleError">Please enter a task title.</div>
+                </div>
+
+                <!-- Subject & Priority Grid -->
+                <div class="form-row">
+                  <!-- Subject Selection -->
+                  <div class="form-group">
+                    <label for="taskSubject" class="form-label">
+                      Subject / Course <span class="required">*</span>
+                    </label>
+                    <div class="input-with-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                      </svg>
+                      <select id="taskSubject" class="form-input" required>
+                        <option value="" disabled selected>Select a subject...</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Data Structures & Algorithms">Data Structures & Algorithms</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Operating Systems">Operating Systems</option>
+                        <option value="Database Systems">Database Systems</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Web Development">Web Development</option>
+                        <option value="English & Soft Skills">English & Soft Skills</option>
+                        <option value="Other">Other Course</option>
+                      </select>
+                    </div>
+                    <div class="form-error" id="subjectError">Please select a subject.</div>
+                  </div>
+
+                  <!-- Priority Level -->
+                  <div class="form-group">
+                    <label for="taskPriority" class="form-label">
+                      Priority Level <span class="required">*</span>
+                    </label>
+                    <div class="priority-selector">
+                      <label class="priority-chip priority-chip-high">
+                        <input type="radio" name="priorityOption" value="High" required>
+                        <span class="chip-inner">
+                          <span class="chip-dot red"></span>
+                          High Priority
+                        </span>
+                      </label>
+                      <label class="priority-chip priority-chip-med">
+                        <input type="radio" name="priorityOption" value="Medium" checked required>
+                        <span class="chip-inner">
+                          <span class="chip-dot amber"></span>
+                          Medium
+                        </span>
+                      </label>
+                      <label class="priority-chip priority-chip-low">
+                        <input type="radio" name="priorityOption" value="Low" required>
+                        <span class="chip-inner">
+                          <span class="chip-dot green"></span>
+                          Low
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Deadline and Estimated Hours Grid -->
+                <div class="form-row">
+                  <!-- Deadline Date & Time -->
+                  <div class="form-group">
+                    <label for="taskDeadline" class="form-label">
+                      Deadline Date <span class="required">*</span>
+                    </label>
+                    <div class="input-with-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                      <input type="date" id="taskDeadline" class="form-input" required>
+                    </div>
+                    <div class="form-error" id="deadlineError">Please select a valid deadline date.</div>
+                  </div>
+
+                  <!-- Estimated Study Time (Hours) -->
+                  <div class="form-group">
+                    <label for="taskEstimatedHours" class="form-label">
+                      Estimated Duration (Hours)
+                    </label>
+                    <div class="input-with-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                      <input type="number" id="taskEstimatedHours" class="form-input" min="0.5" max="50" step="0.5"
+                        placeholder="e.g. 2.5">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Description / Study Notes -->
+                <div class="form-group">
+                  <label for="taskDescription" class="form-label">
+                    Description & Study Notes <span class="text-muted">(Optional)</span>
+                  </label>
+                  <textarea id="taskDescription" class="form-textarea" rows="3"
+                    placeholder="Add specific book chapters, reference URLs, lab submission requirements, or reminders..."></textarea>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                  <button type="reset" class="btn btn-secondary" id="resetTaskFormBtn">Reset Form</button>
+                  <button type="submit" class="btn btn-primary" id="saveTaskBtn">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                      <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                      <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    <span>Save Task</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Helpful Tips Sidebar Card -->
+            <div class="form-side-info">
+              <div class="side-info-card">
+                <div class="info-icon">🎯</div>
+                <h3>Study Planning Tips</h3>
+                <ul class="tips-list">
+                  <li><strong>Break down large syllabi:</strong> Segment complex college projects into smaller daily
+                    tasks.</li>
+                  <li><strong>Accurate deadlines:</strong> Set deadlines at least 1 day before the faculty submission
+                    date for final proofing.</li>
+                  <li><strong>Color codes:</strong> High priority red badges will immediately surface at the top of your
+                    dashboard.</li>
+                  <li><strong>Persistent:</strong> All entries are automatically stored safely in your browser
+                    LocalStorage.</li>
+                </ul>
+              </div>
+
+              <div class="side-info-card mini-quote">
+                <p><em>"Success is the sum of small efforts, repeated day in and day out."</em></p>
+                <small>— Robert Collier</small>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SECTION 4: COMPLETED TASKS ================= -->
+        <section class="page-section" id="section-completed">
+          <div class="section-top-bar">
+            <div>
+              <h2 class="section-title">Completed Study Tasks</h2>
+              <p class="section-subtitle">A showcase of all assignments and milestones you have successfully
+                accomplished.</p>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-outline-danger btn-sm" id="clearCompletedBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Clear All Completed</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Completed Stats Header -->
+          <div class="completed-hero-card">
+            <div class="hero-trophy">🏆</div>
+            <div class="hero-text">
+              <h3>Academic Achievements Archive</h3>
+              <p>You have finished <strong id="completedTotalBadge">0</strong> task(s). Review what you have achieved or
+                restore tasks if you need to review them again.</p>
+            </div>
+          </div>
+
+          <!-- Completed Tasks List -->
+          <div class="tasks-grid" id="completedTasksGrid">
+            <!-- Dynamically injected -->
+          </div>
+
+          <!-- Empty Completed State -->
+          <div class="empty-state-card" id="emptyCompletedState" style="display: none;">
+            <div class="empty-state-icon emerald-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 6v6l4 2"></path>
+              </svg>
+            </div>
+            <h3>No Completed Tasks Yet</h3>
+            <p>Complete tasks from your Dashboard or "My Tasks" section to fill up your achievement wall!</p>
+            <button class="btn btn-primary" data-section="tasks">Go to My Tasks</button>
+          </div>
+        </section>
+
+        <!-- ================= SECTION 5: ABOUT PROJECT ================= -->
+        <section class="page-section" id="section-about">
+          <div class="about-container">
+            <!-- Hero banner -->
+            <div class="about-hero">
+              <span class="badge-tech">B.Tech Mini Project • Frontend Web Development</span>
+              <h2>Student Task & Study Planner</h2>
+              <p class="about-lead">A modern, responsive, client-side web application designed to help undergraduate
+                college students organize coursework, manage submission deadlines, and monitor daily academic
+                productivity.</p>
+            </div>
+
+            <!-- Overview Grid -->
+            <div class="about-grid">
+              <div class="about-card">
+                <div class="about-card-icon blue">🎯</div>
+                <h3>Project Objectives</h3>
+                <ul class="about-check-list">
+                  <li>Provide an intuitive, distraction-free interface for scheduling study sessions.</li>
+                  <li>Eliminate missed academic deadlines through color-coded priority and urgency alerts.</li>
+                  <li>Encourage consistent daily study habits via real-time completion analytics.</li>
+                  <li>Guarantee offline capability and zero backend maintenance via Web Storage API.</li>
+                </ul>
+              </div>
+
+              <div class="about-card">
+                <div class="about-card-icon emerald">⚡</div>
+                <h3>Key Features & Functionalities</h3>
+                <ul class="about-check-list">
+                  <li><strong>Dynamic Dashboard:</strong> Live statistical metrics, completion percentages, and daily
+                    tips.</li>
+                  <li><strong>CRUD Capabilities:</strong> Add, edit, mark complete, and delete tasks with safe
+                    confirmations.</li>
+                  <li><strong>Multi-faceted Search & Filters:</strong> Instant search by name, subject, priority, and
+                    status.</li>
+                  <li><strong>Light & Dark Themes:</strong> User preference auto-saved in local storage.</li>
+                  <li><strong>Zero Dependencies:</strong> 100% pure HTML5, CSS3, and modern ES6+ JavaScript.</li>
+                </ul>
+              </div>
+
+              <div class="about-card">
+                <div class="about-card-icon purple">💻</div>
+                <h3>Technology Stack</h3>
+                <div class="tech-tags-list">
+                  <span class="tech-tag"><strong>HTML5</strong> Semantic Layout</span>
+                  <span class="tech-tag"><strong>CSS3</strong> Custom Properties & Flex/Grid</span>
+                  <span class="tech-tag"><strong>JavaScript</strong> ES6+ (Modules & DOM)</span>
+                  <span class="tech-tag"><strong>LocalStorage API</strong> Client-Side Persistence</span>
+                  <span class="tech-tag"><strong>SVG Icons</strong> Lightweight & Crisp</span>
+                </div>
+              </div>
+
+              <div class="about-card">
+                <div class="about-card-icon amber">🛠️</div>
+                <h3>Data Management & Persistence</h3>
+                <p>The application serializes task objects into standard JSON arrays stored under the key
+                  <code>studyPlanner_tasks_v1</code>. Every state modification instantly writes to the storage layer,
+                  ensuring zero data loss upon browser refresh or tab closure.</p>
+                <div class="demo-data-actions">
+                  <button class="btn btn-outline-primary btn-sm" id="resetDemoTasksBtn">
+                    ↻ Reload Sample Demo Tasks
+                  </button>
+                  <button class="btn btn-outline-danger btn-sm" id="wipeAllDataBtn">
+                    ⚠ Clear All Local Storage
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- College Project Viva Q&A / Architecture Section -->
+            <div class="viva-guide-card">
+              <h3>🎓 College Mini Project Evaluation Notes (Viva Cheat-Sheet)</h3>
+              <div class="accordion-item">
+                <h4>1. How does the application store data without a SQL/NoSQL backend?</h4>
+                <p>The system utilizes the browser's native <strong>HTML5 Web Storage API (LocalStorage)</strong>. Tasks
+                  are stored as key-value pairs where the value is a JSON string. The <code>JSON.stringify()</code>
+                  method is used to persist data, and <code>JSON.parse()</code> reconstructs the JavaScript object model
+                  during initialization.</p>
+              </div>
+              <div class="accordion-item">
+                <h4>2. How is single-page navigation achieved without React or Angular?</h4>
+                <p>Navigation is driven by data attributes (<code>data-section="..."</code>) and event delegation. When
+                  a nav link is clicked, the script toggles CSS <code>active</code> classes across corresponding
+                  <code>&lt;section&gt;</code> elements while updating sidebar highlight states without triggering full
+                  page reloads.</p>
+              </div>
+              <div class="accordion-item">
+                <h4>3. What client-side input validation is implemented?</h4>
+                <p>The application checks for non-empty task titles, valid subject selections, and valid calendar dates
+                  before creating or updating tasks. Inline error messages and CSS state classes provide immediate
+                  visual feedback to the user.</p>
+              </div>
+            </div>
+
+            <!-- Project Meta & Signature Footer -->
+            <div class="project-signature">
+              <p>Designed & Developed for <strong>College B.Tech Mini Project Demonstration</strong>.</p>
+              <p>© 2026 Student Task & Study Planner. Open Source Academic Project.</p>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ================= EDIT TASK MODAL ================= -->
+  <div class="modal-backdrop" id="editModalBackdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <h3>Edit Study Task</h3>
+        </div>
+        <button class="modal-close-btn" id="closeEditModalBtn" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="editTaskForm" novalidate>
+        <div class="modal-body">
+          <input type="hidden" id="editTaskId">
+
+          <div class="form-group">
+            <label for="editTaskTitle" class="form-label">Task Title <span class="required">*</span></label>
+            <input type="text" id="editTaskTitle" class="form-input" required>
+            <div class="form-error" id="editTitleError">Please enter a task title.</div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="editTaskSubject" class="form-label">Subject <span class="required">*</span></label>
+              <select id="editTaskSubject" class="form-input" required>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Data Structures & Algorithms">Data Structures & Algorithms</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Operating Systems">Operating Systems</option>
+                <option value="Database Systems">Database Systems</option>
+                <option value="Physics">Physics</option>
+                <option value="Web Development">Web Development</option>
+                <option value="English & Soft Skills">English & Soft Skills</option>
+                <option value="Other">Other Course</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="editTaskPriority" class="form-label">Priority <span class="required">*</span></label>
+              <select id="editTaskPriority" class="form-input" required>
+                <option value="High">High Priority</option>
+                <option value="Medium">Medium Priority</option>
+                <option value="Low">Low Priority</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="editTaskDeadline" class="form-label">Deadline Date <span class="required">*</span></label>
+              <input type="date" id="editTaskDeadline" class="form-input" required>
+              <div class="form-error" id="editDeadlineError">Please select a valid deadline date.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="editTaskStatus" class="form-label">Status</label>
+              <select id="editTaskStatus" class="form-input">
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editTaskDescription" class="form-label">Notes / Description</label>
+            <textarea id="editTaskDescription" class="form-textarea" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelEditModalBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveEditTaskBtn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= DELETE CONFIRMATION MODAL ================= -->
+  <div class="modal-backdrop" id="deleteModalBackdrop">
+    <div class="modal-dialog modal-dialog-sm">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+          </div>
+          <h3>Confirm Delete</h3>
+        </div>
+        <button class="modal-close-btn" id="closeDeleteModalBtn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this study task?</p>
+        <p class="modal-delete-task-title" id="deleteTaskTitleDisplay">"Task Name"</p>
+        <p class="text-muted text-sm">This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="cancelDeleteModalBtn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TOAST NOTIFICATION CONTAINER ================= -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Application Script -->
+  <script src="script.js"></script>
+</body>
+
+</html>
